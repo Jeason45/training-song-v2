@@ -1,17 +1,26 @@
 import gspread
-from google.oauth2.service_account import Credentials
+from google.oauth2 import service_account
 import pandas as pd
 import numpy as np
 from datetime import timedelta
 import locale
+import os
+import json
 from flask import Flask, jsonify
 
 app = Flask(__name__)
 
 # 📌 Connexion à Google Sheets
 scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-creds = Credentials.from_service_account_file("noplp-api-e35d823d44e0.json", scopes=scope)
-client = gspread.authorize(creds)
+
+# Charger la clé API depuis la variable d'environnement
+credentials_json = os.getenv("GOOGLE_APPLICATION_CREDENTIALS_JSON")
+if credentials_json:
+    credentials_info = json.loads(credentials_json)
+    creds = service_account.Credentials.from_service_account_info(credentials_info, scopes=scope)
+    client = gspread.authorize(creds)
+else:
+    raise ValueError("Clé Google Cloud manquante !")
 
 # Process finished with exit code 1
 SHEET_ID = "11nPts_8ExvcNASZA8rErLeibu6BssicQ_O0tB6Fpb9s"
