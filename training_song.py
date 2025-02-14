@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 # 📌 Connexion à Google Sheets
 scope = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
-creds = Credentials.from_service_account_file("noplp-api-377e05c8d5f1.json", scopes=scope)
+creds = Credentials.from_service_account_file("noplp-api-e35d823d44e0.json", scopes=scope)
 client = gspread.authorize(creds)
 
 # Process finished with exit code 1
