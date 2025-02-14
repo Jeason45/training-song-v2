@@ -1,0 +1,9 @@
+# Ignorer les fichiers JSON contenant des clés API sensibles
+*.json
+
+# Ignorer les fichiers d'environnement (si tu utilises un fichier .env)
+.env
+
+# Ignorer le dossier .DS_Store qui peut se créer sur macOS
+.DS_Store
+noplp-api-*.json
