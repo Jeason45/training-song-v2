@@ -2,8 +2,6 @@ import gspread
 from google.oauth2 import service_account
 import pandas as pd
 import numpy as np
-from datetime import timedelta
-import locale
 import os
 import json
 from flask import Flask, jsonify
@@ -46,8 +44,6 @@ def convert_french_to_english(date_str):
 
 # 📌 Prétraiter les données
 def preprocess_data(df):
-    locale.setlocale(locale.LC_TIME, 'en_US.UTF-8')
-
     df['Date'] = df['Date'].apply(lambda x: convert_french_to_english(x))
     df['Date'] = pd.to_datetime(df['Date'], format='%A %d %B %Y')
 
