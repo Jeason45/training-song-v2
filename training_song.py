@@ -20,7 +20,7 @@ if credentials_json:
 else:
     raise ValueError("Clé Google Cloud manquante !")
 
-# Process finished with exit code 1
+# Spécifier l'ID de la feuille Google Sheets
 SHEET_ID = "11nPts_8ExvcNASZA8rErLeibu6BssicQ_O0tB6Fpb9s"
 sheet = client.open_by_key(SHEET_ID).worksheet("NOPLP")
 
@@ -49,7 +49,9 @@ def preprocess_data(df):
 
     title_data, artist_data = {}, {}
     for _, row in df.iterrows():
-        title, artist, date = row['Titre'], row['Artiste'], row['Date']
+        title = str(row['Titre'])  # Assurez-vous que le titre est bien une chaîne
+        artist = str(row['Artiste'])  # Assurez-vous que l'artiste est bien une chaîne
+        date = row['Date']
         title_data.setdefault(title, []).append(date)
         artist_data.setdefault(artist, []).append(date)
 
@@ -95,15 +97,22 @@ def index():
 
 @app.route('/rappels_titres')
 def rappels_titres():
-    return jsonify(title_review_levels)
+    # Convertir les titres en chaîne et sérialiser correctement
+    cleaned_title_review_levels = {str(key): value for key, value in title_review_levels.items()}
+    return jsonify(cleaned_title_review_levels)
 
 @app.route('/rappels_artistes')
 def rappels_artistes():
-    return jsonify(artist_review_levels)
+    # Convertir les artistes en chaîne et sérialiser correctement
+    cleaned_artist_review_levels = {str(key): value for key, value in artist_review_levels.items()}
+    return jsonify(cleaned_artist_review_levels)
 
 # 📌 Ajouter une nouvelle chanson dans Google Sheets
 @app.route('/ajouter/<titre>/<artiste>/<date>')
 def ajouter_chanson(titre, artiste, date):
+    # Convertir les titres et artistes en chaîne avant de les ajouter
+    titre = str(titre)
+    artiste = str(artiste)
     # Ajouter la chanson à la feuille Google Sheet
     sheet.append_row([date, titre, artiste, "Classique", "Chanson à point", "Oui"])  # Ajoute avec le bon format
     return f"Chanson ajoutée : {titre} - {artiste} ({date})"
